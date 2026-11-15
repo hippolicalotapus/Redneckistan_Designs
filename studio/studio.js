@@ -1,4 +1,4 @@
-import {readDraft,saveDraft,updateDraft} from './studio/draft.js';
+import {readDraft,saveDraft,updateDraft} from './draft.js';
 const form=document.getElementById('studioForm');
 const fields={brand:document.getElementById('studioBrand'),side:document.getElementById('studioSide'),slogan:document.getElementById('studioSlogan'),scale:document.getElementById('studioScale'),x:document.getElementById('studioX'),y:document.getElementById('studioY')};
 const artworks={front:document.getElementById('studioFrontArt'),back:document.getElementById('studioBackArt')};
@@ -7,7 +7,7 @@ let draft=readDraft(storage());
 function render(){
  document.getElementById('studio').dataset.brand=draft.brand;
  for(const [name,field] of Object.entries(fields))field.value=String(draft[name]);
- for(const name of ['scale','x','y'])document.getElementById('studio'+name.toUpperCase()+'Value').textContent=draft[name]+'%';
+ for(const name of ['scale','x','y'])document.getElementById('studio'+name[0].toUpperCase()+name.slice(1)+'Value').textContent=draft[name]+'%';
  for(const [side,art] of Object.entries(artworks)){
   const placement=draft.placements[side];art.textContent=placement.slogan;
   art.style.left=placement.x+'%';art.style.top=placement.y+'%';art.style.setProperty('--art-width',placement.scale+'%');
