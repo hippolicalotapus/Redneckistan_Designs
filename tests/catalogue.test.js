@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {validateCatalogue,filterProducts,safeProduct} from '../catalogue/catalogue.js';
+const data=JSON.parse(readFileSync(new URL('../catalogue/launch-27.json',import.meta.url)));
+test('exactly 27 unique products, nine per group',()=>{assert.equal(validateCatalogue(data),true);assert.equal(new Set(data.products.map(x=>x.id)).size,27)});
+test('filtering keeps correct brand and count',()=>{for(const g of ['mountain','artwear','sarcastabastard']){const rows=filterProducts(data.products,g);assert.equal(rows.length,9);assert.ok(rows.every(p=>p.group===g));}assert.equal(filterProducts(data.products,'all').length,27);assert.equal(filterProducts(data.products,'unknown').length,0)});
+test('checkout cannot be enabled for unverified products',()=>{assert.ok(data.products.every(p=>!safeProduct(p).saleEnabled&&safeProduct(p).priceCad===null));const bad=structuredClone(data);bad.products[0].saleEnabled=true;assert.throws(()=>validateCatalogue(bad));});
+test('duplicate ID rejected',()=>{const bad=structuredClone(data);bad.products[0].id=bad.products[1].id;assert.throws(()=>validateCatalogue(bad));});
+test('brand cross-contamination rejected',()=>{const bad=structuredClone(data);bad.products[0].brand='Sarcastabastard';assert.throws(()=>validateCatalogue(bad));});
+test('mobile viewport and disabled purchase markup',()=>{const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');const js=readFileSync(new URL('../app.js',import.meta.url),'utf8');const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');assert.match(html,/name="viewport"/);assert.match(js,/buy\.disabled=true/);assert.match(css,/@media\(max-width:460px\)/);});
