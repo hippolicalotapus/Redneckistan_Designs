@@ -30,3 +30,12 @@
 .shirt-panel h3{font-size:.83rem;letter-spacing:.13em;text-transform:uppercase;color:#e5d7d0}
 .draft-art{font-size:clamp(.52rem,1.4vw,.86rem);line-height:1.15}
 @media(max-width:700px){.shirt{width:min(100%,230px)}.draft-art{font-size:clamp(.48rem,2vw,.8rem)}}
+
+/* Mobile usability and independent brand presentation. */
+.studio-controls select{min-height:48px}
+.studio-controls textarea{min-height:100px;resize:vertical}
+.studio-controls input[type=range]{min-height:36px;cursor:pointer}
+.studio[data-brand="One Heart"] .shirt-panel{background:radial-gradient(ellipse at 50% 30%,#54424a,#30242b 68%,#211b21);border-color:#82636e}
+.studio[data-brand="Sarcastabastard"] .shirt-panel{background:radial-gradient(ellipse at 50% 30%,#4d3a3b,#241c20 68%,#161316);border-color:#8b555c}
+.studio[data-brand="Sarcastabastard"] .shirt-panel h3{font-family:Impact,system-ui,sans-serif;letter-spacing:.18em}
+@media(max-width:390px){.studio-previews{gap:.3rem}.shirt-panel{padding:.55rem .2rem}.shirt-panel h3{font-size:.72rem}}
