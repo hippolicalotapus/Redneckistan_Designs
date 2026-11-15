@@ -7,7 +7,7 @@ export function normalizeDraft(input={}){
  const brand=BRANDS.includes(input.brand)?input.brand:'One Heart';
  const side=SIDES.includes(input.side)?input.side:'front';
  const legacy=normalizePlacement(input);
- const placements={front:normalizePlacement(input.placements?.front??legacy),back:normalizePlacement(input.placements?.back??{})};
+ const placements={front:normalizePlacement(input.placements?.front??(side==='front'?legacy:{})),back:normalizePlacement(input.placements?.back??(side==='back'?legacy:{}))};
  return {brand,side,placements,...placements[side]};
 }
 export function updateDraft(input,patch){const draft=normalizeDraft(input);const nextSide=SIDES.includes(patch.side)?patch.side:draft.side;const placements={...draft.placements};if(['scale','x','y','slogan'].some(k=>Object.hasOwn(patch,k))){placements[nextSide]=normalizePlacement({...placements[nextSide],...patch})}
