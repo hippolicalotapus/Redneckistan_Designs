@@ -10,7 +10,7 @@ function render(){
  for(const name of ['scale','x','y'])document.getElementById('studio'+name[0].toUpperCase()+name.slice(1)+'Value').textContent=draft[name]+'%';
  for(const [side,art] of Object.entries(artworks)){
   const placement=draft.placements[side];art.textContent=placement.slogan;
-  art.style.left=placement.x+'%';art.style.top=placement.y+'%';art.style.setProperty('--art-width',placement.scale+'%');
+  art.style.left=placement.x+'%';art.style.top=placement.y+'%';art.style.setProperty('--art-width',placement.scale+'%');art.style.setProperty('--art-scale',String(placement.scale/100));
  }
 }
 form.addEventListener('input',event=>{

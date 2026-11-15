@@ -43,7 +43,7 @@
 /* Studio print placement: readable at narrow widths without changing design art. */
 .shirt{container-type:inline-size}
 .shirt .print-area{top:21%;height:59%}
-.draft-art{font-size:clamp(8px,4cqw,15px);line-height:1.16;overflow-wrap:anywhere;text-wrap:balance;max-height:100%;overflow:hidden}
+.draft-art{font-size:clamp(1px,calc(4cqw * var(--art-scale,.5)),15px);line-height:1.16;overflow-wrap:anywhere;text-wrap:balance;max-height:100%;overflow:hidden}
 .studio[data-brand="One Heart"] .draft-art{font-weight:700;letter-spacing:.01em}
 .studio[data-brand="Sarcastabastard"] .draft-art{font-weight:900;letter-spacing:.005em;text-transform:none}
 @media(max-width:390px){.studio-previews{grid-template-columns:repeat(2,minmax(0,1fr))}.shirt-panel{min-width:0}}
