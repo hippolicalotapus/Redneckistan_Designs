@@ -1,23 +1,8 @@
-import { validateCatalogue, filterProducts, safeProduct } from './catalogue/catalogue.js';
-const grid=document.getElementById('catalogue');
-const status=document.getElementById('status');
-const buttons=[...document.querySelectorAll('[data-filter]')];
-let products=[];
-function render(filter='all'){
-  const visible=filterProducts(products,filter);
-  grid.replaceChildren();
-  for(const item of visible){
-    const product=safeProduct(item);
-    const card=document.createElement('article');card.className=`product ${product.group}`;
-    const art=document.createElement('div');art.className='art';art.textContent='ARTWORK PENDING';art.setAttribute('aria-label','Original artwork not yet verified');
-    const details=document.createElement('div');details.className='details';
-    const brand=document.createElement('small');brand.textContent=product.brand;
-    const name=document.createElement('h2');name.textContent=product.workingLabel;
-    const note=document.createElement('p');note.textContent='Concept label · awaiting artwork and supplier verification';
-    const buy=document.createElement('button');buy.className='buy';buy.disabled=true;buy.type='button';buy.textContent='Not available';
-    details.append(brand,name,note,buy);card.append(art,details);grid.append(card);
-  }
-  status.textContent=`Showing ${visible.length} of ${products.length} design positions · no purchases enabled`;
-}
-async function init(){try{const response=await fetch('./catalogue/launch-27.json',{cache:'no-store'});if(!response.ok)throw Error('Catalogue unavailable');const data=await response.json();validateCatalogue(data);products=data.products;render();buttons.forEach(button=>button.addEventListener('click',()=>{buttons.forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});render(button.dataset.filter);}));}catch(e){status.textContent='Catalogue preview unavailable: '+e.message;}}
+import {validateCatalogue,filterProducts,safeProduct} from './catalogue/catalogue.js';
+import {searchProducts,toggleSaved,filterSaved} from './catalogue/discovery.js';
+const grid=document.getElementById('catalogue'),status=document.getElementById('status'),search=document.getElementById('search'),dialog=document.getElementById('details'),detail=document.getElementById('detailContent'),savedCount=document.getElementById('savedCount'),savedToggle=document.getElementById('wishlistToggle');
+const filters=[...document.querySelectorAll('[data-filter]')];let products=[],group='all',saved=new Set(),savedOnly=false;
+function render(){const visible=filterSaved(searchProducts(filterProducts(products,group),search.value),saved,savedOnly);grid.replaceChildren();for(const item of visible){const p=safeProduct(item),card=document.createElement('article');card.className='product '+p.group;const art=document.createElement('div');art.className='art';art.textContent='ARTWORK UNDER REVIEW';const info=document.createElement('div');info.className='details';const brand=document.createElement('small');brand.textContent=p.brand;const title=document.createElement('h2');title.textContent=p.workingLabel;const note=document.createElement('p');note.textContent='Concept preview · not yet for sale';const actions=document.createElement('div');actions.className='actions';const view=document.createElement('button');view.className='view';view.textContent='View details';view.addEventListener('click',()=>openDetails(p));const save=document.createElement('button');save.className='save';save.setAttribute('aria-label','Save '+p.workingLabel);save.setAttribute('aria-pressed',String(saved.has(p.id)));save.textContent=saved.has(p.id)?'♥':'♡';save.addEventListener('click',()=>{saved=toggleSaved(saved,p.id);render()});actions.append(view,save);info.append(brand,title,note,actions);card.append(art,info);grid.append(card)}status.textContent='Showing '+visible.length+' of '+products.length+' design positions · purchasing disabled';savedCount.textContent=String(saved.size);savedToggle.setAttribute('aria-pressed',String(savedOnly))}
+function openDetails(p){detail.replaceChildren();const brand=document.createElement('p');brand.textContent=p.brand+' · '+p.group;const heading=document.createElement('h2');heading.textContent=p.workingLabel;const warning=document.createElement('p');warning.textContent='Original artwork, garment details and supplier pricing are not verified. This is not a product offer.';const label=document.createElement('label');label.textContent='Preview size selection ';label.htmlFor='preview-size';const select=document.createElement('select');select.id='preview-size';for(const size of ['Choose size','S','M','L','XL','2XL']){const option=document.createElement('option');option.textContent=size;option.value=size==='Choose size'?'':size;select.append(option)}const note=document.createElement('p');note.textContent='Size availability and measurements are not yet confirmed.';const buy=document.createElement('button');buy.className='buy';buy.disabled=true;buy.textContent='Checkout unavailable';detail.append(brand,heading,warning,label,select,note,buy);dialog.showModal()}
+async function init(){try{const res=await fetch('./catalogue/launch-27.json',{cache:'no-store'});if(!res.ok)throw Error('Catalogue unavailable');const data=await res.json();validateCatalogue(data);products=data.products;render();search.addEventListener('input',render);filters.forEach(b=>b.addEventListener('click',()=>{group=b.dataset.filter;filters.forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});render()}));savedToggle.addEventListener('click',()=>{savedOnly=!savedOnly;render()})}catch(e){status.textContent='Catalogue unavailable: '+e.message}}
 init();
