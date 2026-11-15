@@ -14,3 +14,23 @@ test('draft persists locally without publication or checkout',()=>{
  assert.equal(readDraft({getItem(){throw Error('blocked')}}).brand,'One Heart');
  assert.equal(saveDraft({setItem(){throw Error('blocked')}},{}),false);
 });
+
+test('front and back retain independent layouts and text',async()=>{
+ const {updateDraft}=await import('../studio/draft.js');
+ let d=updateDraft({}, {side:'front',slogan:'Front draft',scale:35,x:25,y:30});
+ d=updateDraft(d,{side:'back',slogan:'Back draft',scale:70,x:75,y:80});
+ assert.equal(d.placements.front.slogan,'Front draft');
+ assert.equal(d.placements.back.slogan,'Back draft');
+ d=updateDraft(d,{side:'front'});
+ assert.equal(d.slogan,'Front draft');
+ assert.equal(d.scale,35);
+ d=updateDraft(d,{side:'back'});
+ assert.equal(d.slogan,'Back draft');
+ assert.equal(d.scale,70);
+});
+test('legacy draft is migrated without losing original placement',async()=>{
+ const {normalizeDraft}=await import('../studio/draft.js');
+ const d=normalizeDraft({brand:'Sarcastabastard',side:'back',slogan:'Legacy',scale:41,x:33,y:66});
+ assert.equal(d.placements.back.slogan,'Legacy');
+ assert.equal(d.placements.front.slogan,'');
+});
