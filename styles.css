@@ -21,3 +21,12 @@
 .studio[data-brand="One Heart"] .draft-art{font-family:Georgia,serif}
 .studio select:focus-visible,.studio textarea:focus-visible,.studio input:focus-visible{outline:3px solid #f2d6ac;outline-offset:2px}
 @media(max-width:700px){.studio-layout{grid-template-columns:1fr}.studio-previews{gap:.4rem}.shirt-panel{padding:.35rem}.draft-art{font-size:clamp(.45rem,2vw,.8rem)}}
+
+/* Tailored garment mockups, drawn in CSS/SVG. No approved print art is modified. */
+.shirt{width:min(100%,260px);aspect-ratio:300/350;background:none;clip-path:none;box-shadow:none;filter:drop-shadow(0 9px 13px #0008)}
+.garment-illustration{display:block;width:100%;height:100%;overflow:visible}
+.shirt .print-area{left:31%;top:23%;width:38%;height:51%;overflow:hidden}
+.shirt-panel{background:radial-gradient(ellipse at 50% 30%,#44404a 0%,#242027 65%,#171419 100%);padding:.8rem .45rem 1rem;border:1px solid #4b424c}
+.shirt-panel h3{font-size:.83rem;letter-spacing:.13em;text-transform:uppercase;color:#e5d7d0}
+.draft-art{font-size:clamp(.52rem,1.4vw,.86rem);line-height:1.15}
+@media(max-width:700px){.shirt{width:min(100%,230px)}.draft-art{font-size:clamp(.48rem,2vw,.8rem)}}
