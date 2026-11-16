@@ -4,6 +4,8 @@ The preview bag is implemented and tested; live checkout is not connected. No ca
 
 The server-side item-draft validator is now implemented and tested separately from the browser bag. It resolves trusted variant prices and blocks missing approvals and destinations, but is not connected to an endpoint or payment provider. It does not calculate a payable total, create an order, or fulfill anything.
 
+A separate payment-to-order state model is now tested offline with fictional events. It handles pending/paid/failed status, duplicate notifications and a stable fulfillment intent. It does not verify signatures, contact a provider, persist orders transactionally or send a supplier request. A trusted final-total service and the actual webhook/database/worker integration remain required.
+
 ## Evidence reviewed
 
 A read-only review of the existing supplier correspondence confirms G&L accepts individual direct-to-customer fulfillment and the proposed adult-humour apparel, with original artwork ownership retained. A custom-site API was discussed as possible, but the API contract and test-order workflow have not been supplied. Existing shipping figures are estimates rather than destination-specific checkout rates. Private supplier costs and correspondence are not copied into this client project.
