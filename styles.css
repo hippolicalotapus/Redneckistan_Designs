@@ -48,3 +48,17 @@
 .studio[data-brand="Sarcastabastard"] .draft-art{font-weight:900;letter-spacing:.005em;text-transform:none}
 @media(max-width:390px){.studio-previews{grid-template-columns:repeat(2,minmax(0,1fr))}.shirt-panel{min-width:0}}
 @media(prefers-reduced-motion:reduce){.studio *{scroll-behavior:auto;transition:none!important}}
+
+/* Nonbinding preview bag; checkout remains unavailable. */
+.mast{flex-wrap:wrap}.mast .wordmark{margin-right:auto}
+#bagToggle{background:#e5c9aa;color:#211a18;border:1px solid #e5c9aa;border-radius:2rem;padding:.6rem .85rem;min-height:44px}
+#bagToggle:disabled{opacity:.5;cursor:wait}
+#previewBag{background:#1f1d22;color:#fff;border:1px solid #75676f;border-radius:1rem;width:min(94vw,560px);max-height:90vh;padding:1.5rem}
+#previewBag::backdrop{background:#000b}#previewBag h2{font:2rem Georgia,serif;margin:.5rem 0 1rem}
+.bag-item{border-top:1px solid #5d515b;padding:1rem 0}.bag-item h3{margin:.2rem 0}.bag-item p{color:#d6cbd0}
+.bag-item label,#detailContent label{display:block;margin:.8rem 0 .35rem}
+.bag-item input,#preview-quantity{display:block;background:#312c33;color:white;border:1px solid #a49ba3;border-radius:.4rem;padding:.7rem;font:inherit;font-size:16px;min-height:44px;width:6rem}
+.bag-item button,#bagClear,.preview-add{border:1px solid #aa8791;background:#39333b;color:#fff;border-radius:.45rem;min-height:44px;padding:.7rem;margin:.5rem .4rem .2rem 0}
+.bag-item button{overflow-wrap:anywhere;max-width:100%}#previewBag .buy{display:block;width:100%;padding:1rem;background:#504b50;color:#ddd;border:0;border-radius:.5rem;cursor:not-allowed}
+.preview-add{display:block;background:#e5c9aa;color:#211a18}#bagClear:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:460px){.mast .wordmark{flex:1 0 100%;max-width:none}.mast{gap:.6rem}#bagToggle,#wishlistToggle{flex:1}#previewBag{padding:1rem}.bag-item h3{overflow-wrap:anywhere}}
