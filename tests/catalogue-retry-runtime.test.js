@@ -94,7 +94,7 @@ test('valid additional product appears alongside launch designs without enabling
   Blob,URL,document:{createElement:()=>control(),body:{append(){}}},setTimeout,safeProduct:x=>x,
  };
  vm.createContext(context);
- vm.runInContext('let catalogueLoading=false,catalogueListenersBound=false;\\n'+initSource+'\\nthis.start=init;',context);
+ vm.runInContext('let catalogueLoading=false,catalogueListenersBound=false;\n'+initSource+'\nthis.start=init;',context);
  await context.start();
  assert.equal(renders,1);
  assert.equal(context.products.length,28);
