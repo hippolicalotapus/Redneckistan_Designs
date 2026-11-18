@@ -79,3 +79,27 @@ test('invalid optional catalogue preserves the 27 launch products',async()=>{
  assert.deepEqual(context.products.map(p=>p.id),launch.products.map(p=>p.id));
  assert.equal(filter.textContent,'All 27');
 });
+
+test('valid additional product appears alongside launch designs without enabling checkout',async()=>{
+ const status=control(),filter=control();
+ let renders=0;
+ const launch=JSON.parse(readFileSync(new URL('../catalogue/launch-27.json',import.meta.url),'utf8'));
+ const extra={id:'extra-001',group:'artwear',brand:'One Heart',workingLabel:'Extra preview',saleEnabled:false,priceCad:null};
+ const context={status,search:control(),sortOrder:control(),clearSearch:control(),resetBrowse:control(),
+  savedToggle:control(),downloadSaved:control(),wishlistStorageStatus:control(),filters:[filter],
+  products:[],saved:new Set(),group:'all',savedOnly:false,wishlistStorageDenied:false,
+  availableStorage:()=>({}),inspectWishlist:()=>({saved:new Set(),invalid:false}),
+  validateCatalogue,combineCatalogue,console,render:()=>{renders++},
+  fetch:async(url)=>({ok:true,json:async()=>url.includes('additional-products')?{products:[extra]}:launch}),
+  Blob,URL,document:{createElement:()=>control(),body:{append(){}}},setTimeout,safeProduct:x=>x,
+ };
+ vm.createContext(context);
+ vm.runInContext('let catalogueLoading=false,catalogueListenersBound=false;\\n'+initSource+'\\nthis.start=init;',context);
+ await context.start();
+ assert.equal(renders,1);
+ assert.equal(context.products.length,28);
+ assert.deepEqual(context.products.slice(0,27).map(p=>p.id),launch.products.map(p=>p.id));
+ assert.equal(context.products[27].id,'extra-001');
+ assert.ok(context.products.every(p=>p.saleEnabled===false));
+ assert.equal(filter.textContent,'All 28');
+});
