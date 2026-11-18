@@ -17,6 +17,8 @@ function control(){
 
 test('HTTP 503 retry recovers and registers storefront controls once',async()=>{
  const status=control(),search=control(),sortOrder=control(),clearSearch=control(),resetBrowse=control();
+ let retryButton;
+ status.append=(...items)=>{retryButton=items.find(item=>item?.listeners)};
  const savedToggle=control(),downloadSaved=control(),wishlistStorageStatus=control(),filter=control();
  const calls=[];let renders=0;
  const valid={products:Array.from({length:27},(_,i)=>({id:String(i),saleEnabled:false}))};
@@ -33,6 +35,18 @@ test('HTTP 503 retry recovers and registers storefront controls once',async()=>{
  vm.runInContext('let catalogueLoading=false,catalogueListenersBound=false;\n'+initSource+'\nthis.start=init;',context);
  await context.start();
  assert.match(status.textContent,/Catalogue unavailable/);
- assert.equal(status.listeners.size,0);
- // The retry button is appended to status; capture it with a DOM-like append method.
+ assert.ok(retryButton, 'failure displays retry button');
+ assert.equal(retryButton.textContent,'Retry catalogue');
+ await retryButton.listeners.get('click')[0]();
+ assert.equal(calls.length,2, 'failed fetch followed by successful retry');
+ assert.equal(renders,1, 'successful catalogue renders');
+ assert.equal(context.products.length,27);
+ for(const c of [search,sortOrder,clearSearch,resetBrowse,savedToggle,downloadSaved,filter]){
+  assert.equal([...c.listeners.values()].flat().length,1, 'control registered once');
+ }
+ await context.start();
+ assert.equal(renders,2, 'subsequent reload renders');
+ for(const c of [search,sortOrder,clearSearch,resetBrowse,savedToggle,downloadSaved,filter]){
+  assert.equal([...c.listeners.values()].flat().length,1, 'reload does not duplicate handlers');
+ }
 });
