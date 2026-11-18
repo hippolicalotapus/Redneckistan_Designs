@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {normalizeDraft,readDraft,saveDraft} from '../studio/draft.js';
 test('draft bounds protect layout and brand separation',()=>{
  const d=normalizeDraft({brand:'unknown',side:'invalid',scale:999,x:-20,y:NaN,slogan:'x'.repeat(200)});
- assert.deepEqual([d.brand,d.side,d.scale,d.x,d.y,d.slogan.length],['One Heart','front',100,0,50,140]);
+ assert.deepEqual([d.brand,d.side,d.scale,d.x,d.y,d.slogan.length],['Sarcastabastard','front',100,0,50,140]);
  assert.equal(normalizeDraft({brand:'Sarcastabastard',side:'back',scale:36}).brand,'Sarcastabastard');
 });
 test('draft persists locally without publication or checkout',()=>{
@@ -11,10 +11,9 @@ test('draft persists locally without publication or checkout',()=>{
  assert.equal(saveDraft(storage,{brand:'Sarcastabastard',scale:42,slogan:'Draft only'}),true);
  assert.equal(readDraft(storage).slogan,'Draft only');
  assert.equal(readDraft(storage).scale,42);
- assert.equal(readDraft({getItem(){throw Error('blocked')}}).brand,'One Heart');
+ assert.equal(readDraft({getItem(){throw Error('blocked')}}).brand,'Sarcastabastard');
  assert.equal(saveDraft({setItem(){throw Error('blocked')}},{}),false);
 });
-
 test('front and back retain independent layouts and text',async()=>{
  const {updateDraft}=await import('../studio/draft.js');
  let d=updateDraft({}, {side:'front',slogan:'Front draft',scale:35,x:25,y:30});
@@ -33,4 +32,12 @@ test('legacy draft is migrated without losing original placement',async()=>{
  const d=normalizeDraft({brand:'Sarcastabastard',side:'back',slogan:'Legacy',scale:41,x:33,y:66});
  assert.equal(d.placements.back.slogan,'Legacy');
  assert.equal(d.placements.front.slogan,'');
+});
+
+test('legacy One Heart studio records migrate to Sarcastabastard without losing front/back text',()=>{
+ const old={brand:'One Heart',side:'back',placements:{front:{slogan:'Keep front',scale:30},back:{slogan:'Keep back',scale:45}}};
+ const draft=normalizeDraft(old);
+ assert.equal(draft.brand,'Sarcastabastard');
+ assert.equal(draft.placements.front.slogan,'Keep front');
+ assert.equal(draft.placements.back.slogan,'Keep back');
 });
