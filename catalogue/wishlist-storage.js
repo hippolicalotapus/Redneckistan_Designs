@@ -11,6 +11,7 @@ export function inspectWishlist(storage,validIds){
   if(stored===null)return {saved:new Set(),invalid:false};
   const raw=JSON.parse(stored);
   if(!Array.isArray(raw))return {saved:new Set(),invalid:true};
-  return {saved:new Set(raw.filter(id=>typeof id==='string'&&validIds.has(id))),invalid:false};
+  const retained=raw.filter(id=>typeof id==='string'&&validIds.has(id));
+  return {saved:new Set(retained),invalid:retained.length!==raw.length||new Set(retained).size!==retained.length};
  }catch{return {saved:new Set(),invalid:true}}
 }
