@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {validateCatalogue} from '../catalogue/catalogue.js';
 
 const source=readFileSync(new URL('../app.js',import.meta.url),'utf8');
 const initSource=source.slice(source.indexOf('async function init()'),source.indexOf('\napplyStorefrontIdentity();'));
@@ -21,11 +22,12 @@ test('HTTP 503 retry recovers and registers storefront controls once',async()=>{
  status.append=(...items)=>{retryButton=items.find(item=>item?.listeners)};
  const savedToggle=control(),downloadSaved=control(),wishlistStorageStatus=control(),filter=control();
  const calls=[];let renders=0;
- const valid={products:Array.from({length:27},(_,i)=>({id:String(i),saleEnabled:false}))};
+ const valid=JSON.parse(readFileSync(new URL('../catalogue/launch-27.json',import.meta.url),'utf8'));
+ assert.equal(validateCatalogue(valid),true);
  const context={status,search,sortOrder,clearSearch,resetBrowse,savedToggle,downloadSaved,
   wishlistStorageStatus,filters:[filter],products:[],saved:new Set(),group:'all',savedOnly:false,
   wishlistStorageDenied:false,availableStorage:()=>({}),
-  inspectWishlist:()=>({saved:new Set(),invalid:false}),validateCatalogue:()=>{},
+  inspectWishlist:()=>({saved:new Set(),invalid:false}),validateCatalogue,
   render:()=>{renders++},fetch:async()=>{calls.push('fetch');return calls.length===1
    ?{ok:false,status:503}:{ok:true,json:async()=>valid}},
   Blob,URL,document:{createElement:()=>control(),body:{append(){}}},setTimeout,
@@ -41,6 +43,7 @@ test('HTTP 503 retry recovers and registers storefront controls once',async()=>{
  assert.equal(calls.length,2, 'failed fetch followed by successful retry');
  assert.equal(renders,1, 'successful catalogue renders');
  assert.equal(context.products.length,27);
+ assert.ok(context.products.every(p=>p.saleEnabled===false));
  for(const c of [search,sortOrder,clearSearch,resetBrowse,savedToggle,downloadSaved,filter]){
   assert.equal([...c.listeners.values()].flat().length,1, 'control registered once');
  }
