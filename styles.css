@@ -48,3 +48,6 @@
 .studio[data-brand="Sarcastabastard"] .draft-art{font-weight:900;letter-spacing:.005em;text-transform:none}
 @media(max-width:390px){.studio-previews{grid-template-columns:repeat(2,minmax(0,1fr))}.shirt-panel{min-width:0}}
 @media(prefers-reduced-motion:reduce){.studio *{scroll-behavior:auto;transition:none!important}}
+
+/* Customer browsing controls: independent of product approval and checkout. */
+.browse-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.65rem;margin:.35rem 0 0}.browse-controls label{font-size:.85rem;color:#e1d3cc}.browse-controls select,.browse-controls button{background:#302a32;color:#fff;border:1px solid #8c7d87;border-radius:.5rem;padding:.65rem .8rem;min-height:44px}.browse-controls button[hidden]{display:none}.browse-controls :focus-visible{outline:3px solid #f2d6ac;outline-offset:2px}@media(max-width:460px){.browse-controls select{flex:1;min-width:0}}
