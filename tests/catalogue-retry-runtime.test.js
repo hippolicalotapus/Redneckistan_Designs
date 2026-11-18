@@ -51,7 +51,31 @@ test('HTTP 503 retry recovers and registers storefront controls once',async()=>{
  }
  await context.start();
  assert.equal(renders,2, 'subsequent reload renders');
+ assert.equal(calls.length,5, 'reload fetches launch and optional catalogue once each');
  for(const c of [search,sortOrder,clearSearch,resetBrowse,savedToggle,downloadSaved,filter]){
   assert.equal([...c.listeners.values()].flat().length,1, 'reload does not duplicate handlers');
  }
+});
+
+
+test('invalid optional catalogue preserves the 27 launch products',async()=>{
+ const status=control(),filter=control();
+ let renders=0;
+ const launch=JSON.parse(readFileSync(new URL('../catalogue/launch-27.json',import.meta.url),'utf8'));
+ const context={status,search:control(),sortOrder:control(),clearSearch:control(),resetBrowse:control(),
+  savedToggle:control(),downloadSaved:control(),wishlistStorageStatus:control(),filters:[filter],
+  products:[],saved:new Set(),group:'all',savedOnly:false,wishlistStorageDenied:false,
+  availableStorage:()=>({}),inspectWishlist:()=>({saved:new Set(),invalid:false}),
+  validateCatalogue,combineCatalogue,console,render:()=>{renders++},
+  fetch:async(url)=>({ok:true,json:async()=>url.includes('additional-products')
+   ?{products:[{id:launch.products[0].id,group:'artwear',brand:'One Heart',workingLabel:'Duplicate',saleEnabled:false,priceCad:null}]}:launch}),
+  Blob,URL,document:{createElement:()=>control(),body:{append(){}}},setTimeout,safeProduct:x=>x,
+ };
+ vm.createContext(context);
+ vm.runInContext('let catalogueLoading=false,catalogueListenersBound=false;\n'+initSource+'\nthis.start=init;',context);
+ await context.start();
+ assert.equal(renders,1);
+ assert.equal(context.products.length,27);
+ assert.deepEqual(context.products.map(p=>p.id),launch.products.map(p=>p.id));
+ assert.equal(filter.textContent,'All 27');
 });
