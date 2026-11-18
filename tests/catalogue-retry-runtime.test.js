@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {validateCatalogue} from '../catalogue/catalogue.js';
+import {combineCatalogue} from '../catalogue/expanded-catalogue.js';
 
 const source=readFileSync(new URL('../app.js',import.meta.url),'utf8');
 const initSource=source.slice(source.indexOf('async function init()'),source.indexOf('\napplyStorefrontIdentity();'));
@@ -27,9 +28,10 @@ test('HTTP 503 retry recovers and registers storefront controls once',async()=>{
  const context={status,search,sortOrder,clearSearch,resetBrowse,savedToggle,downloadSaved,
   wishlistStorageStatus,filters:[filter],products:[],saved:new Set(),group:'all',savedOnly:false,
   wishlistStorageDenied:false,availableStorage:()=>({}),
-  inspectWishlist:()=>({saved:new Set(),invalid:false}),validateCatalogue,
-  render:()=>{renders++},fetch:async()=>{calls.push('fetch');return calls.length===1
-   ?{ok:false,status:503}:{ok:true,json:async()=>valid}},
+  inspectWishlist:()=>({saved:new Set(),invalid:false}),validateCatalogue,combineCatalogue,console,
+  render:()=>{renders++},fetch:async(url)=>{calls.push(url);return calls.length===1
+   ?{ok:false,status:503}:url.includes('additional-products')
+   ?{ok:true,json:async()=>({products:[]})}:{ok:true,json:async()=>valid}},
   Blob,URL,document:{createElement:()=>control(),body:{append(){}}},setTimeout,
   safeProduct:x=>x,
  };
@@ -40,7 +42,7 @@ test('HTTP 503 retry recovers and registers storefront controls once',async()=>{
  assert.ok(retryButton, 'failure displays retry button');
  assert.equal(retryButton.textContent,'Retry catalogue');
  await retryButton.listeners.get('click')[0]();
- assert.equal(calls.length,2, 'failed fetch followed by successful retry');
+ assert.equal(calls.length,3, 'failed launch fetch, successful launch retry, and additional catalogue fetch');
  assert.equal(renders,1, 'successful catalogue renders');
  assert.equal(context.products.length,27);
  assert.ok(context.products.every(p=>p.saleEnabled===false));
