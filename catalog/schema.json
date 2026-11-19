@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "line", "status", "printFile", "mockup"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^(oh-[map][0-9]{2}|sb-[0-9]{3})$" },
+    "line": { "enum": ["oneheart", "sarcastabastard"] },
+    "collection": { "enum": ["mountain", "artwear", "paisley"] },
+    "title": { "type": "string", "maxLength": 40 },
+    "slogan": { "type": "string" },
+    "status": { "enum": ["approved", "shortlisted", "rework"] },
+    "artDirection": { "type": "string" },
+    "printFile": { "type": "string" },
+    "mockup": { "type": "string" }
+  }
+}
