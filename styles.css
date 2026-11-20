@@ -1,0 +1,53 @@
+:root{font-family:system-ui,-apple-system,sans-serif;color:#f4f0eb;background:#111115}*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}.notice{text-align:center;padding:.65rem;background:#efe0ca;color:#28211f;font-size:.72rem;font-weight:800;letter-spacing:.12em}.mast{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.15rem max(1.25rem,calc((100vw - 1120px)/2));border-bottom:1px solid #444}.wordmark{color:#f4eee8;text-decoration:none;font-weight:850;letter-spacing:.07em;font-size:clamp(.75rem,2.5vw,1rem)}.wordmark span{color:#d4b394}#wishlistToggle{background:#29242a;color:#fff;border:1px solid #71646d;border-radius:2rem;padding:.6rem .85rem;white-space:nowrap}.hero{padding:4.5rem max(1.25rem,calc((100vw - 1120px)/2));background:radial-gradient(ellipse at 75% 20%,#65334b 0,transparent 48%),linear-gradient(130deg,#18262a,#19171b 70%)}.eyebrow{text-transform:uppercase;font-size:.75rem;letter-spacing:.16em;color:#e5c9ad}.hero h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(2.7rem,7vw,5.7rem);line-height:1.04;margin:.7rem 0}.hero em{color:#dfc1a3}.hero>p:last-child{max-width:34rem;color:#e1d8d2}main{max-width:1160px;padding:2rem 1.25rem 5rem;margin:auto}.tools{display:grid;gap:1rem}.search-label{font-size:.82rem;color:#d6c4b9}#search{width:100%;padding:1rem 1.1rem;border:1px solid #77707b;border-radius:.7rem;background:#211f25;color:white}nav{display:flex;flex-wrap:wrap;gap:.55rem}nav button{background:#29262d;color:#eee;border:1px solid #5d5660;border-radius:2rem;padding:.65rem 1rem}nav button.active,nav button:focus-visible{background:#e5c9aa;color:#211a18}#status{color:#c7bfc2;font-size:.9rem;margin:1.5rem 0}#catalogue{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.product{background:#211f24;border:1px solid #39343c;border-radius:1rem;overflow:hidden;min-width:0}.art{height:210px;display:grid;place-items:center;text-align:center;font-size:.85rem;letter-spacing:.14em;font-weight:700;padding:1rem}.mountain .art{background:linear-gradient(135deg,#183d3d,#71908b);color:#e4f4e8}.artwear .art{background:linear-gradient(135deg,#7b394b,#c6a06d);color:#fff3dc}.sarcastabastard .art{background:repeating-linear-gradient(145deg,#262329,#262329 14px,#342d36 14px,#342d36 28px);color:#f2d0d5}.details{padding:1rem}.details small{color:#d0bfb8;text-transform:uppercase;letter-spacing:.09em}.details h2{font-size:1.1rem;min-height:2.8rem;margin:.6rem 0}.details p{color:#c5bdc0;font-size:.83rem}.actions{display:flex;gap:.5rem}.actions button{padding:.7rem;border-radius:.5rem;border:1px solid #71646d;color:white;background:#39333b}.actions .view{flex:1}.actions .save{min-width:3rem;font-size:1.25rem}.actions .save[aria-pressed=true]{color:#f1b1c2}button:focus-visible,input:focus-visible{outline:3px solid #f2d6ac;outline-offset:2px}#details{background:#1f1d22;color:#fff;border:1px solid #75676f;border-radius:1rem;width:min(94vw,560px);padding:1.5rem}#details::backdrop{background:#000b}.close{float:right;background:transparent;color:#fff;border:0;font-size:2rem}#detailContent h2{font-family:Georgia,serif;font-size:2rem}#detailContent select{padding:.7rem;background:#312c33;color:white;border:1px solid #a49ba3;border-radius:.4rem;min-width:8rem}#detailContent .buy{display:block;width:100%;margin-top:1rem;padding:1rem;border:0;border-radius:.5rem;background:#504b50;color:#ddd;cursor:not-allowed}footer{text-align:center;padding:2rem 1rem;color:#c5bdc0;border-top:1px solid #353238}@media(max-width:750px){#catalogue{grid-template-columns:repeat(2,minmax(0,1fr))}.art{height:170px}}@media(max-width:460px){#catalogue{grid-template-columns:1fr}.art{height:190px}.hero{padding:3rem 1.25rem}nav button{flex:1 1 43%}.mast{padding:1rem}.wordmark{max-width:65%}}
+/* Design workshop: self-contained; does not change catalogue artwork. */
+.studio{margin:0 0 3rem;padding:clamp(1rem,3vw,2rem);border:1px solid #55464f;border-radius:1.1rem;background:#211d23}
+.studio-intro h2{font-family:Georgia,serif;font-size:clamp(1.8rem,4vw,2.8rem);margin:.4rem 0}
+.studio-intro p:last-child{color:#d6cbd0;max-width:46rem}
+.studio-layout{display:grid;grid-template-columns:minmax(220px,320px) minmax(0,1fr);gap:1.5rem}
+.studio-controls{display:grid;gap:.65rem;align-content:start}
+.studio-controls label{font-size:.85rem;font-weight:700}
+.studio-controls select,.studio-controls textarea{width:100%;padding:.7rem;border:1px solid #8c7d87;border-radius:.45rem;background:#302a32;color:#fff;font:inherit}
+.studio-controls input[type=range]{width:100%;accent-color:#dfbda9}
+.studio-controls output{float:right}
+#studioStatus{font-size:.8rem;color:#d5c4bd}
+.studio-previews{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;align-items:start}
+.shirt-panel{min-width:0;padding:.65rem;background:#151318;border-radius:.7rem;text-align:center}
+.shirt-panel h3{margin:.2rem 0 .7rem;font-size:.9rem}
+.shirt{position:relative;margin:0 auto;width:min(100%,240px);aspect-ratio:1/1.15;background:#e9e6e2;clip-path:polygon(24% 3%,39% 0,43% 7%,57% 7%,61% 0,76% 3%,100% 18%,88% 39%,77% 33%,77% 100%,23% 100%,23% 33%,12% 39%,0 18%);box-shadow:inset 0 0 30px #0002}
+.shirt .print-area{position:absolute;left:27%;top:20%;width:46%;height:61%;overflow:hidden}
+.draft-art{position:absolute;transform:translate(-50%,-50%);width:var(--art-width,50%);max-height:95%;overflow-wrap:anywhere;white-space:pre-wrap;font-size:clamp(.5rem,1.4vw,.95rem);font-weight:800;line-height:1.12;color:#8b2348;text-align:center}
+.studio[data-brand="Sarcastabastard"]{border-color:#a05c65;background:#21191d}
+.studio[data-brand="Sarcastabastard"] .draft-art{color:#21181d;font-family:Impact,system-ui,sans-serif;letter-spacing:.015em}
+.studio[data-brand="One Heart"] .draft-art{font-family:Georgia,serif}
+.studio select:focus-visible,.studio textarea:focus-visible,.studio input:focus-visible{outline:3px solid #f2d6ac;outline-offset:2px}
+@media(max-width:700px){.studio-layout{grid-template-columns:1fr}.studio-previews{gap:.4rem}.shirt-panel{padding:.35rem}.draft-art{font-size:clamp(.45rem,2vw,.8rem)}}
+
+/* Tailored garment mockups, drawn in CSS/SVG. No approved print art is modified. */
+.shirt{width:min(100%,260px);aspect-ratio:300/350;background:none;clip-path:none;box-shadow:none;filter:drop-shadow(0 9px 13px #0008)}
+.garment-illustration{display:block;width:100%;height:100%;overflow:visible}
+.shirt .print-area{left:31%;top:23%;width:38%;height:51%;overflow:hidden}
+.shirt-panel{background:radial-gradient(ellipse at 50% 30%,#44404a 0%,#242027 65%,#171419 100%);padding:.8rem .45rem 1rem;border:1px solid #4b424c}
+.shirt-panel h3{font-size:.83rem;letter-spacing:.13em;text-transform:uppercase;color:#e5d7d0}
+.draft-art{font-size:clamp(.52rem,1.4vw,.86rem);line-height:1.15}
+@media(max-width:700px){.shirt{width:min(100%,230px)}.draft-art{font-size:clamp(.48rem,2vw,.8rem)}}
+
+/* Mobile usability and independent brand presentation. */
+.studio-controls select{min-height:48px}
+.studio-controls textarea{min-height:100px;resize:vertical}
+.studio-controls input[type=range]{min-height:36px;cursor:pointer}
+.studio[data-brand="One Heart"] .shirt-panel{background:radial-gradient(ellipse at 50% 30%,#54424a,#30242b 68%,#211b21);border-color:#82636e}
+.studio[data-brand="Sarcastabastard"] .shirt-panel{background:radial-gradient(ellipse at 50% 30%,#4d3a3b,#241c20 68%,#161316);border-color:#8b555c}
+.studio[data-brand="Sarcastabastard"] .shirt-panel h3{font-family:Impact,system-ui,sans-serif;letter-spacing:.18em}
+@media(max-width:390px){.studio-previews{gap:.3rem}.shirt-panel{padding:.55rem .2rem}.shirt-panel h3{font-size:.72rem}}
+
+/* Studio print placement: readable at narrow widths without changing design art. */
+.shirt{container-type:inline-size}
+.shirt .print-area{top:21%;height:59%}
+.draft-art{font-size:clamp(1px,calc(4cqw * var(--art-scale,.5)),15px);line-height:1.16;overflow-wrap:anywhere;text-wrap:balance;max-height:100%;overflow:hidden}
+.studio[data-brand="One Heart"] .draft-art{font-weight:700;letter-spacing:.01em}
+.studio[data-brand="Sarcastabastard"] .draft-art{font-weight:900;letter-spacing:.005em;text-transform:none}
+@media(max-width:390px){.studio-previews{grid-template-columns:repeat(2,minmax(0,1fr))}.shirt-panel{min-width:0}}
+@media(prefers-reduced-motion:reduce){.studio *{scroll-behavior:auto;transition:none!important}}
+
+/* Customer browsing controls: independent of product approval and checkout. */
+.browse-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.65rem;margin:.35rem 0 0}.browse-controls label{font-size:.85rem;color:#e1d3cc}.browse-controls select,.browse-controls button{background:#302a32;color:#fff;border:1px solid #8c7d87;border-radius:.5rem;padding:.65rem .8rem;min-height:44px}.browse-controls button[hidden]{display:none}.browse-controls :focus-visible{outline:3px solid #f2d6ac;outline-offset:2px}@media(max-width:460px){.browse-controls select{flex:1;min-width:0}}

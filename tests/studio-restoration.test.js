@@ -1,0 +1,15 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {inspectDraft} from '../studio/draft.js';
+test('missing studio draft is not a restoration error',()=>{const r=inspectDraft({getItem:()=>null});assert.equal(r.invalid,false)});
+test('corrupt JSON studio draft reports restoration error',()=>{const r=inspectDraft({getItem:()=>'{broken'});assert.equal(r.invalid,true);assert.equal(r.draft.brand,'Sarcastabastard')});
+test('nonobject studio draft reports restoration error',()=>{assert.equal(inspectDraft({getItem:()=> '[]'}).invalid,true)});
+test('denied studio draft storage reports restoration error',()=>{assert.equal(inspectDraft({getItem:()=>{throw Error('denied')}}).invalid,true)});
+test('valid studio draft is restored',()=>{const r=inspectDraft({getItem:()=>JSON.stringify({side:'back',placements:{back:{slogan:'Hello'}}})});assert.equal(r.invalid,false);assert.equal(r.draft.placements.back.slogan,'Hello')});
+test('malformed saved placement warns but keeps the valid opposite side',()=>{const r=inspectDraft({getItem:()=>JSON.stringify({side:'front',placements:{front:{slogan:42},back:{slogan:'Keep this'}}})});assert.equal(r.invalid,true);assert.equal(r.draft.placements.back.slogan,'Keep this');assert.equal(r.draft.placements.front.slogan,'')});
+test('non-object saved placements warn instead of silently resetting',()=>{const r=inspectDraft({getItem:()=>JSON.stringify({placements:['bad']})});assert.equal(r.invalid,true)});
+test('out-of-range saved placement is flagged while clamped safely',()=>{const r=inspectDraft({getItem:()=>JSON.stringify({side:'front',placements:{front:{scale:999,x:-20,y:50,slogan:'Keep'},back:{slogan:'Other'}}})});assert.equal(r.invalid,true);assert.equal(r.draft.placements.front.scale,100);assert.equal(r.draft.placements.front.x,0);assert.equal(r.draft.placements.back.slogan,'Other')});
+test('non-finite numeric placement is flagged without losing other side',()=>{const r=inspectDraft({getItem:()=>JSON.stringify({placements:{front:{scale:'Infinity'},back:{slogan:'Valid'}}})});assert.equal(r.invalid,true);assert.equal(r.draft.placements.back.slogan,'Valid')});
+test('overlength saved slogan warns and preserves valid text and opposite side',()=>{const r=inspectDraft({getItem:()=>JSON.stringify({placements:{front:{slogan:'A'.repeat(145)},back:{slogan:'Keep'}}})});assert.equal(r.invalid,true);assert.equal(r.draft.placements.front.slogan.length,140);assert.equal(r.draft.placements.back.slogan,'Keep')});
+test('boolean saved coordinates warn rather than silently becoming numeric positions',()=>{const r=inspectDraft({getItem:()=>JSON.stringify({placements:{front:{x:true,y:false,slogan:'Front'},back:{slogan:'Keep back'}}})});assert.equal(r.invalid,true);assert.equal(r.draft.placements.back.slogan,'Keep back')});
+test('unsupported saved brand is reported rather than silently relabeled',()=>{const r=inspectDraft({getItem:()=>JSON.stringify({brand:'One Heart',placements:{front:{slogan:'My original design'}}})});assert.equal(r.invalid,true);assert.equal(r.draft.brand,'Sarcastabastard');assert.equal(r.draft.placements.front.slogan,'My original design')});

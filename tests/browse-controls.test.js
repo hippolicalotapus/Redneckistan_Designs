@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {sortProducts,searchProducts,filterSaved} from '../catalogue/discovery.js';
+const catalogue=JSON.parse(readFileSync(new URL('../catalogue/launch-27.json',import.meta.url))).products;
+test('original order stays unchanged by default',()=>{const sorted=sortProducts(catalogue);assert.deepEqual(sorted,catalogue);assert.notEqual(sorted,catalogue)});
+test('A-Z and Z-A sort labels without mutating input',()=>{const snapshot=catalogue.map(p=>p.id);const asc=sortProducts(catalogue,'name-asc'),desc=sortProducts(catalogue,'name-desc');assert.deepEqual(desc.map(p=>p.id),asc.map(p=>p.id).reverse());assert.deepEqual(catalogue.map(p=>p.id),snapshot);assert.equal(asc.length,27)});
+test('sorting respects filtered saved results',()=>{const saved=new Set(catalogue.slice(0,3).map(p=>p.id));const filtered=filterSaved(searchProducts(catalogue,''),saved,true);const sorted=sortProducts(filtered,'name-asc');assert.equal(sorted.length,3);assert.ok(sorted.every(p=>saved.has(p.id)))});
+test('browse controls never change product sale state',()=>{sortProducts(catalogue,'name-desc');assert.ok(catalogue.every(p=>p.saleEnabled===false&&p.priceCad===null))});
+test('customer controls and clear-search focus recovery are wired',()=>{const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');const js=readFileSync(new URL('../app.js',import.meta.url),'utf8');assert.match(html,/id="sortOrder"/);assert.match(html,/id="clearSearch"/);assert.match(js,/clearSearch\.addEventListener\('click'/);assert.match(js,/search\.focus\(\)/)});
